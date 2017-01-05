@@ -6,7 +6,13 @@ public class PlayerController : MonoBehaviour {
 
     // Use this for initialization
     private Rigidbody2D rb2d;
-	void Start () {
+
+    public GameObject shot;
+    public Transform shotSpawn;
+    public float fireRate;
+    private float nextFire;
+
+    void Start () {
         rb2d = GetComponent<Rigidbody2D>();
 	}
 
@@ -17,7 +23,7 @@ public class PlayerController : MonoBehaviour {
 		float moveH = Input.GetAxis ("Horizontal");
 		float moveV = Input.GetAxis ("Vertical");
 		Vector2 move = new Vector2(moveH, moveV);
-        rb2d.AddForce(move * speed);
+        rb2d.velocity = move * speed; // replacing rb2d.AddForce(move * speed);
 		//rigidbody2D.velocity = move * speed;
 		//rigidbody2D.position = new Vector3 (
 		//	Mathf.Clamp (rigidbody.position.x, xMin, xMax),
@@ -26,4 +32,14 @@ public class PlayerController : MonoBehaviour {
 	//	);
 		//transform.position += move * speed * Time.deltaTime;
 	}
+
+    private void Update()
+    {
+        if (Time.time > nextFire)
+        {
+            nextFire = Time.time + fireRate;
+            Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+        }
+
+    }
 }
